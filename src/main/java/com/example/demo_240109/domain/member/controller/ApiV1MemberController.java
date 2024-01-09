@@ -4,12 +4,10 @@ import com.example.demo_240109.domain.member.entity.Member;
 import com.example.demo_240109.domain.member.request.MemberRequest;
 import com.example.demo_240109.domain.member.service.MemberService;
 import com.example.demo_240109.global.rsData.RsData;
-import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/member")
@@ -20,9 +18,7 @@ public class ApiV1MemberController {
 
     // 로그인
     @PostMapping("/login")
-    public RsData<String> login(MemberRequest.loginMemberRequest loginForm) {
-
-
+    public RsData<String> login(@Valid @RequestBody MemberRequest.loginMemberRequest loginForm) {
 
         return memberService.login(loginForm);
     }
@@ -30,7 +26,7 @@ public class ApiV1MemberController {
     // 회원가입
     @PostMapping("/join")
     @ResponseBody
-    public RsData<String> join(@Validated @RequestBody MemberRequest.createMemberRequest joinForm){
+    public RsData<String> join(@Valid @RequestBody MemberRequest.createMemberRequest joinForm){
 
         // 데이터 유효성 검사
         if(!joinForm.getPassword().trim().equals(joinForm.getPasswordConfirm().trim())){

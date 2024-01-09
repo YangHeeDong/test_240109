@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -27,4 +29,8 @@ public class Member extends BaseEntity {
 
     @Column(unique = true)
     private String nickname;
+
+    public List<String> getAuthoritiesAsStringList() {
+        return List.of("ROLE_MEMBER");
+    }
 }

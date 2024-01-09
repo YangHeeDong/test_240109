@@ -5,6 +5,7 @@ import com.example.demo_240109.domain.article.request.ArticleRequest;
 import com.example.demo_240109.domain.article.response.ArticleResponse;
 import com.example.demo_240109.domain.article.service.ArticleService;
 import com.example.demo_240109.global.rsData.RsData;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class ApiV1ArticleController {
     // 등록
     @PostMapping("")
     @ResponseBody
-    private RsData<ArticleResponse.createArticleResponse> createArticle (@RequestBody ArticleRequest.createArticleRequest articleRequest){
+    private RsData<ArticleResponse.createArticleResponse> createArticle (@Valid @RequestBody ArticleRequest.createArticleRequest articleRequest){
 
         RsData<Article> rsData = articleService.createArticle(articleRequest.getTitle(),articleRequest.getContent());
 

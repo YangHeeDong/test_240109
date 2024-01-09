@@ -1,5 +1,6 @@
 package com.example.demo_240109.domain.article.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import org.antlr.v4.runtime.misc.NotNull;
 
@@ -7,10 +8,10 @@ import org.antlr.v4.runtime.misc.NotNull;
 public class ArticleRequest {
     @Getter
     public static class createArticleRequest{
-        @NotNull
+        @NotBlank
         private String title;
 
-        @NotNull
+        @NotBlank
         private String content;
     }
 }

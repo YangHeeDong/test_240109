@@ -1,5 +1,6 @@
 package com.example.demo_240109.domain.member.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import org.antlr.v4.runtime.misc.NotNull;
 
@@ -8,27 +9,28 @@ public class MemberRequest {
 
     @Getter
     public static class createMemberRequest{
-        @NotNull
+        @NotBlank
         private String loginId;
 
-        @NotNull
+        @NotBlank
         private String password;
 
-        @NotNull
+        @NotBlank
         private String passwordConfirm;
 
-        @NotNull
+        @NotBlank
         private String email;
 
-        @NotNull
+        @NotBlank
         private String nickname;
     }
 
+    @Getter
     public static class loginMemberRequest {
-        @NotNull
+        @NotBlank
         private String loginId;
 
-        @NotNull
+        @NotBlank
         private String password;
     }
 }
