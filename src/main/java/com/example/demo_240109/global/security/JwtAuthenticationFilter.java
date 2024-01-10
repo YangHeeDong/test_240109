@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 rq.setLogin(user);
 
             }else{
-                rq.removeCookie("AccessToken");
+                rq.removeCrossDomainCookie("AccessToken");
                 rq.setLogout();
             }
         }else{

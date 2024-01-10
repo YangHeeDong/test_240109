@@ -159,4 +159,15 @@ public class Rq {
         SecurityContextHolder.getContext().setAuthentication(null);
     }
 
+    public void removeCrossDomainCookie(String name) {
+        ResponseCookie cookie = ResponseCookie.from(name, null)
+                .path("/")
+                .maxAge(0)
+                .sameSite("None")
+                .secure(true)
+                .httpOnly(true)
+                .build();
+
+        resp.addHeader("Set-Cookie", cookie.toString());
+    }
 }

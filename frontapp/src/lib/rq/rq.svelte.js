@@ -31,6 +31,21 @@ class Rq {
             id : 0,
             nickname : ""
         }
+
+        fetch("http://localhost:8080/api/v1/member/logout",{
+				method : "GET",
+				credentials:'include'
+			})
+			.then(response => {
+        		return response.json();
+      		})
+			.then(rs => {
+
+                if(rs.success){
+                    alert("로그아웃 되었습니다.");
+                }
+			});
+
         window.location.href = "/article/list";
     }
 
@@ -55,7 +70,7 @@ class Rq {
                 if(rs.success){
                     const data = rs.data;
                     this.setLogined(data.id,data.nickname);
-                    alert(this.isLogin());
+                    console.log("RQ " + this.isLogin());
                 }
 			});
     }

@@ -23,8 +23,21 @@ public class ApiV1MemberController {
     private final MemberService memberService;
     private final Rq rq;
 
+    // 로그아웃
+    @GetMapping("/logout")
+    @ResponseBody
+    public RsData<String> logout() {
+
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        rq.removeCrossDomainCookie("AccessToken");
+
+        return RsData.of("200","로그아웃",null);
+    }
+
     // Frontend 에서 로그인 여부 확인
     @GetMapping("/me")
+    @ResponseBody
     public RsData<MemberResponse.me> me() {
 
         if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")){
@@ -36,6 +49,7 @@ public class ApiV1MemberController {
 
     // 로그인
     @PostMapping("/login")
+    @ResponseBody
     public RsData<String> login(@Valid @RequestBody MemberRequest.loginMemberRequest loginForm) {
 
         return memberService.login(loginForm);

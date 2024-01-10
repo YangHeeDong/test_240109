@@ -27,6 +27,7 @@ public class ApiSecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/api/v1/member/join").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v1/member/login").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/member/me").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configure(http))
