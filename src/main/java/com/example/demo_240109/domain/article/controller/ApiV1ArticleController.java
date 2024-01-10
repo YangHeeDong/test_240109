@@ -5,11 +5,15 @@ import com.example.demo_240109.domain.article.request.ArticleRequest;
 import com.example.demo_240109.domain.article.response.ArticleResponse;
 import com.example.demo_240109.domain.article.service.ArticleService;
 import com.example.demo_240109.global.rsData.RsData;
+import com.example.demo_240109.global.security.SecurityUser;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -18,6 +22,30 @@ import java.util.List;
 public class ApiV1ArticleController {
 
     private final ArticleService articleService;
+
+    // 삭제
+    @DeleteMapping("{id}")
+    @ResponseBody
+    private RsData<String> deleteArticle(@PathVariable long id){
+
+        SecurityUser su = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        RsData<String> rsData = articleService.deleteArticle(id,su.getId());
+
+        return  RsData.of(rsData.getResultCode(), rsData.getMsg(), null);
+    }
+
+    // 수정
+    @PutMapping("")
+    @ResponseBody
+    private RsData<ArticleResponse.createArticleResponse> modifyArticle(@Valid @RequestBody ArticleRequest.modifyArticleRequest articleRequest){
+
+        SecurityUser su = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        RsData<Article> rsData = articleService.modifyArticle(articleRequest.getId(),articleRequest.getTitle(),articleRequest.getContent(),su.getId());
+
+        return  RsData.of(rsData.getResultCode(), rsData.getMsg(), new ArticleResponse.createArticleResponse(rsData.getData()));
+    }
 
     // 단건조회
     @GetMapping("{id}")
@@ -44,7 +72,9 @@ public class ApiV1ArticleController {
     @ResponseBody
     private RsData<ArticleResponse.createArticleResponse> createArticle (@Valid @RequestBody ArticleRequest.createArticleRequest articleRequest){
 
-        RsData<Article> rsData = articleService.createArticle(articleRequest.getTitle(),articleRequest.getContent());
+        SecurityUser su = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        RsData<Article> rsData = articleService.createArticle(articleRequest.getTitle(),articleRequest.getContent(),su.getId());
 
         return  RsData.of(rsData.getResultCode(), rsData.getMsg(), new ArticleResponse.createArticleResponse(rsData.getData()));
     }

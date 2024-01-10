@@ -120,4 +120,8 @@ public class MemberService {
         return memberRepository.findById(id);
 
     }
+
+    public Optional<Member> findById(long memberId) {
+        return memberRepository.findById(memberId);
+    }
 }

@@ -1,9 +1,11 @@
 package com.example.demo_240109.domain.article.response;
 
+import com.example.demo_240109.domain.article.dto.ArticleDto;
 import com.example.demo_240109.domain.article.entity.Article;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,19 +23,38 @@ public class ArticleResponse {
 
     @Getter
     public static class getArticlesResponse {
-        List<Article> articleList;
+        List<ArticleDto> articleList = new ArrayList<>();
 
         public getArticlesResponse(List<Article> articleList){
-            this.articleList = articleList;
+            for(Article article : articleList){
+                ArticleDto articleDto = ArticleDto.builder()
+                        .id(article.getId())
+                        .title(article.getTitle())
+                        .content(article.getContent())
+                        .createDate(article.getCreateDate())
+                        .modifyDate(article.getModifyDate())
+                        .memberId(article.getMember().getId())
+                        .nickname(article.getMember().getNickname()).build();
+
+                this.articleList.add(articleDto);
+            }
+
         }
     }
 
     @Getter
     public static class getArticleResponse {
-        Article article;
+        ArticleDto article;
 
         public getArticleResponse(Article article){
-            this.article = article;
+            this.article = ArticleDto.builder()
+                    .id(article.getId())
+                    .title(article.getTitle())
+                    .content(article.getContent())
+                    .createDate(article.getCreateDate())
+                    .modifyDate(article.getModifyDate())
+                    .memberId(article.getMember().getId())
+                    .nickname(article.getMember().getNickname()).build();
         }
 
     }

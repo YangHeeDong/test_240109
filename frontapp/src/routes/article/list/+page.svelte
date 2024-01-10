@@ -1,12 +1,19 @@
 <script>
 	import { onMount } from "svelte";
-	
+	import rq from '$lib/rq/rq.svelte.js';
+
 	import moment from 'moment/min/moment-with-locales'
     moment.locale('ko')
 
-	let articles = [];
+	/**
+	 * @type {any[]}
+	 */
+	let articles = $state([]);
 
-	onMount( () => 
+    let memberId = $state(0);
+    let memberNickname = $state("");
+
+	onMount( async () => 
 	{
 		fetch("http://localhost:8080/api/v1/articles",{
 			method : "GET",
@@ -15,11 +22,12 @@
 		.then(response => {
         	return response.json();
       	}).then(data => articles = data.data.articleList);
+        
+        await rq.initAuth();
+        memberId = await rq.getMember().id;
+        memberNickname = await rq.getMember().nickname;
 	}
 	);
-
-	
-
 </script>
 
 
@@ -52,7 +60,7 @@
         </tbody>
 
       </table>
-
+      {#if memberId !=0}
       <a class="btn-sm btn-primary text-decoration-none float-end " href="/article/create">등록하기</a>
-
+      {/if}
 </div>

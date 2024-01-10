@@ -14,4 +14,17 @@ public class ArticleRequest {
         @NotBlank
         private String content;
     }
+
+    @Getter
+    public static class modifyArticleRequest {
+
+        @NotBlank
+        private long id;
+
+        @NotBlank
+        private String title;
+
+        @NotBlank
+        private String content;
+    }
 }

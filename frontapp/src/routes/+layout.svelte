@@ -2,19 +2,22 @@
 
     import { onMount } from 'svelte';
     import rq from '$lib/rq/rq.svelte.js';
+
     // @ts-ignore
     const { children } = $props();
 
-    var isLogin = $state(false);
-    
-    onMount(async() => {
-        
+    let memberId = $state(0);
+    let memberNickname = $state("");
 
+    onMount(async () => {
         await rq.initAuth();
-        isLogin = rq.isLogin();
-
-        console.log(isLogin);
+        memberId = await rq.getMember().id;
+        memberNickname = await rq.getMember().nickname;
 	});
+
+
+    
+
 
 </script>
 
@@ -33,7 +36,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                {#if isLogin == false}
+                {#if memberId == 0}
                     <li class="nav-item">
                         <a class="nav-link" href="/member/join">회원가입</a>
                     </li>
@@ -41,9 +44,9 @@
                         <a class="nav-link" href="/member/login">로그인</a>
                     </li>
                 {/if}
-                {#if isLogin}
+                {#if memberId != 0}
                     <li>
-                        <button on:click={() => rq.setLogout()} class="btn btn-link">로그아웃</button>
+                        <button style="text-decoration: none; color: inherit;" on:click={() => rq.setLogout()} class="btn btn-link">로그아웃</button>
                     </li>
                 {/if}
             </ul>
