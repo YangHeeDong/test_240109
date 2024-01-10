@@ -25,21 +25,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String accessToken = rq.getCookieValue("AccessToken",null);
 
         // 토큰이 있다면
-        if(!accessToken.isEmpty()){
+        if(accessToken != null){
 
-            // 토큰 유효성 검사
             if(memberService.validationToken(accessToken)){
-                accessToken = memberService.findByAccessToken(accessToken);
-                rq.setCrossDomainCookie("accessToken",accessToken);
+                //토큰 기반으로 User 생성
+                SecurityUser user = memberService.getUserByAccessToken(accessToken);
+                rq.setLogin(user);
+
+            }else{
+                rq.removeCookie("AccessToken");
+                rq.setLogout();
             }
-
-            //토큰을 기반으로 User 생성
-            SecurityUser user = memberService.getUserByAccessToken(accessToken);
-            rq.setLogin(user);
-
-
+        }else{
+            rq.setLogout();
         }
 
+        filterChain.doFilter(request,response);
     }
 
 

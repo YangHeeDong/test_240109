@@ -1,14 +1,18 @@
 <script>
 
-    // 왜 여기서 import하면 아래 render에 적용이 안되지?
-    // import moment from 'moment/min/moment-with-locales'
-    // moment.locale('ko')
+    import { onMount } from 'svelte';
+    import rq from '$lib/rq/rq.svelte.js';
+
+    // @ts-ignore
+    const { children } = $props();
     
-	
-
-
-    const {children} = $props();
-
+    onMount(async() => {
+        
+        rq.initAuth();
+        alert(rq.member.id);
+        
+        alert(rq.isLogin());
+	});
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
@@ -26,12 +30,20 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item ">
-                    <a class="nav-link" href="/member/join">회원가입</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/member/login">로그인</a>
-                </li>
+                {#if rq.isLogout()}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/member/join">회원가입</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/member/login">로그인</a>
+                    </li>
+                {/if}
+                {#if rq.isLogin()}
+                    <li>
+                        <button on:click={() => rq.setLogout()} class="btn btn-link">로그아웃</button>
+                    </li>
+                {/if}
+                
             </ul>
         </div>
     </div>

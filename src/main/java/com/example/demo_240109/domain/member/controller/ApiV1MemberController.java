@@ -2,12 +2,18 @@ package com.example.demo_240109.domain.member.controller;
 
 import com.example.demo_240109.domain.member.entity.Member;
 import com.example.demo_240109.domain.member.request.MemberRequest;
+import com.example.demo_240109.domain.member.response.MemberResponse;
 import com.example.demo_240109.domain.member.service.MemberService;
+import com.example.demo_240109.global.rq.Rq;
 import com.example.demo_240109.global.rsData.RsData;
+import com.example.demo_240109.global.security.SecurityUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/member")
@@ -15,6 +21,18 @@ import org.springframework.web.bind.annotation.*;
 public class ApiV1MemberController {
 
     private final MemberService memberService;
+    private final Rq rq;
+
+    // Frontend 에서 로그인 여부 확인
+    @GetMapping("/me")
+    public RsData<MemberResponse.me> me() {
+
+        if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")){
+            return RsData.of("401","안로그인",null);
+        }
+        SecurityUser securityUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return RsData.of("200","로그인", new MemberResponse.me(securityUser.getId(), securityUser.getUsername()));
+    }
 
     // 로그인
     @PostMapping("/login")

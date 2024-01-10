@@ -32,11 +32,8 @@
         		return response.json();
       		})
 			.then(rs => {
-				// 로그인 후 처리
 				alert(rs.msg);
-				// if(rs.success){
-				// 	window.location.href = "/member/login";	
-				// }
+				window.location.href = "/article/list";
 			});
     }
 	

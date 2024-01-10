@@ -135,7 +135,7 @@ public class Rq {
 
             Object principal = auth.getPrincipal();
 
-            if(principal == null) return null;
+            if(principal.equals("anonymousUser")) return null;
 
             securityUser = (SecurityUser) principal;
         }
@@ -147,11 +147,16 @@ public class Rq {
 
         Authentication auth = new UsernamePasswordAuthenticationToken(
                 securityUser,
-                securityUser.getPassword()
+                securityUser.getPassword(),
+                securityUser.getAuthorities()
         );
 
         SecurityContextHolder.getContext().setAuthentication(auth);
 
+    }
+
+    public void setLogout() {
+        SecurityContextHolder.getContext().setAuthentication(null);
     }
 
 }

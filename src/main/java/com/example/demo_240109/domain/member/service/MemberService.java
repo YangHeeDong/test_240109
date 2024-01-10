@@ -103,7 +103,7 @@ public class MemberService {
         Claims claims = authTokenService.decode(accessToken);
 
         long id = Long.parseLong(claims.get("id").toString());
-        String username = claims.get("username").toString();
+        String username = claims.get("nickname").toString();
 
         List<? extends GrantedAuthority> authorities = ((List<String>)claims.get("authorities"))
                 .stream()
@@ -111,5 +111,13 @@ public class MemberService {
                 .toList();
 
         return new SecurityUser(id,username,"",authorities);
+    }
+
+    public Optional<Member> findByAccessToken(String accessToken) {
+        Claims claims = authTokenService.decode(accessToken);
+        long id = Long.parseLong(claims.get("id").toString());
+
+        return memberRepository.findById(id);
+
     }
 }
